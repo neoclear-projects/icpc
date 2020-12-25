@@ -1,10 +1,19 @@
-﻿#include <bits/stdc++.h>
+﻿#include <iostream>
 #include <algorithm>
+#include <string>
+#include <string_view>
+#include <vector>
+#include <array>
+#include <map>
+#include <unordered_map>
+#include <set>
+#include <unordered_set>
+#include <algorithm>
+#include <queue>
+#include <deque>
 
-#define inf 0xffff
 typedef long long i64;
 typedef double f64;
-#define nil NULL
 
 using namespace std;
 

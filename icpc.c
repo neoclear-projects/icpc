@@ -5,7 +5,11 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <fcntl.h>
+#if defined(__APPLE__) || defined(__FreeBSD__)
+#include <copyfile.h>
+#else
 #include <sys/sendfile.h>
+#endif
 #include <pwd.h>
 #include <sys/wait.h>
 
@@ -83,6 +87,11 @@ int copy_template_file(char *problem_id) {
         return 1;
     }
 
+    ssize_t r;
+
+#if defined(__APPLE__) || defined(__FreeBSD__)
+    r = fcopyfile(template_fid, problem_fid, 0, COPYFILE_ALL);
+#else
     struct stat finfo = { 0 };
     if (fstat(template_fid, &finfo) == -1) {
         close(template_fid);
@@ -90,7 +99,8 @@ int copy_template_file(char *problem_id) {
         return 1;
     }
     
-    ssize_t r = sendfile(problem_fid, template_fid, NULL, finfo.st_size);
+    r = sendfile(problem_fid, template_fid, NULL, finfo.st_size);
+#endif
 
     close(template_fid);
     close(problem_fid);
